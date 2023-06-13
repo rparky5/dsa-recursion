@@ -30,41 +30,46 @@ function find(arr, val) {
 
 function isPalindrome(str) {
   if (str.length <= 1) return true;
-  return (str[0] === str[str.length-1]) && isPalindrome(str.slice(1, -1))
+  return (str[0] === str[str.length - 1]) && isPalindrome(str.slice(1, -1));
 }
 
 /** revString: return a copy of a string, but in reverse. */
 
 function revString(str) {
   if (str.length === 0) return "";
-  return str[str.length-1] + revString(str.slice(0, -1))
+  return str[str.length - 1] + revString(str.slice(0, -1));
 }
 
 /** findIndex: return the index of val in arr (or -1 if val is not present). */
 
 function findIndex(arr, val) {
-  if (arr.length === 0) return -1;
-  if (arr[0] === val) return 0;
-  return findIndex(arr.slice(1), val) === -1 ? -1 : 1 + findIndex(arr.slice(1), val)
-}
-for (let i = 0; i < arr.length; i++) {
-  if (arr[i] === val) {
-    return i;
-  }
-}
-return -1;
 
-/**
- *
- *
- *
- * fi(["duck", "cat", "pony"])
- */
+  function _findIndex(arr, val, i = 0) {
+    if (arr.length === i) return -1;
+    if (arr[i] === val) return i;
+    return _findIndex(arr, val, i + 1);
+  }
+
+  return _findIndex(arr, val, 0);
+}
 
 /** gatherStrings: given an object, return an array of all of the string values. */
 
 function gatherStrings(obj) {
+  let out = [];
 
+  function _gatherStrings(obj) {
+    for (let key in obj) {
+      if (typeof obj[key] === "object") {
+        _gatherStrings(obj[key]);
+      } else if (typeof obj[key] === "string") {
+        out.push(obj[key]);
+      }
+    }
+  }
+
+  _gatherStrings(obj);
+  return out;
 }
 
 // FURTHER STUDY
@@ -74,14 +79,57 @@ function gatherStrings(obj) {
 
 function binarySearch(arr, val) {
 
+  function _binarySearch(arr, val, left = 0, right = arr.length - 1) {
+    if (left > right) return false;
+
+    let mid = Math.floor((left + right) / 2);
+
+    if (arr[mid] === val) {
+      return true;
+    }
+    if (arr[mid] < val) {
+      return _binarySearch(arr, val, mid + 1, right);
+    } else {
+      return _binarySearch(arr, val, left, mid - 1);
+    }
+  }
+
+  return _binarySearch(arr, val)
 }
 
+// while (min <= max) {
+//   mid = Math.floor((min + max) / 2);
+//   if (arr[mid] === val) {
+//     return true;
+//   }
+//   if (arr[mid] < val) {
+//     min = mid + 1;
+//   } else {
+//     max = mid - 1;
+//   }
+// }
 
 /** binarySearch: given a sorted array of numbers, and a value,
  * return the index of that value (or -1 if val is not present). */
 
 function binarySearchIndex(arr, val) {
 
+  function _binarySearchIndex(arr, val, left = 0, right = arr.length - 1) {
+    if (left > right) return -1;
+
+    let mid = Math.floor((left + right) / 2);
+
+    if (arr[mid] === val) {
+      return mid;
+    }
+    if (arr[mid] < val) {
+      return _binarySearchIndex(arr, val, mid + 1, right);
+    } else {
+      return _binarySearchIndex(arr, val, left, mid - 1);
+    }
+  }
+
+  return _binarySearchIndex(arr, val)
 }
 
 // you might find the above two problems easier if you change the function signature to:
